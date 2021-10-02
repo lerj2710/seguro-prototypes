@@ -1,9 +1,47 @@
 
 //Constructores
-function seguro(marca, year, tipo) {
+function Seguro(marca, year, tipo) {
     this.marca = marca;
     this.year = year;
     this.tipo = tipo;
+}
+// realiar una cotizacion
+Seguro.prototype.cotizarSeguro = function () {
+    /*
+    1 = Americano 1.15
+    2 = Asiatico 1.05
+    3 = Europeo 1.35
+    */
+   let cantida;
+    const base = 2000;
+   switch (this.marca) {
+        case '1':
+            cantida = base * 1.15;
+            break;
+        case '2':
+            cantida = base * 1.05;
+            break;
+        case '3':
+            cantida = base * 1.35;
+            break;
+               
+       default:
+           break;
+   }
+   //leer el año 
+   const diferencia = new Date().getFullYear() - this.year;
+   //por cada año de diferencia se reduce el costo a un 3%
+   cantida -= ((diferencia *3) * cantida) / 100;
+   /**
+    * si es de tipo basico es se multiplica un 30% mas
+    * si es de tipo completo es se multiplica un 50% mas
+    */
+   if (this.tipo === 'basico') {
+       cantida *= 1.30;
+   }else{
+       cantida *=1.50;
+   }
+   console.log(cantida);
 }
 
 function UI() {}
@@ -70,5 +108,10 @@ function cotizarSeguro(e) {
            return;
         }
         
-        ui.mostrarMensaje('Cotizando', 'exito');
+        ui.mostrarMensaje('Cotizando...', 'correcto');
+
+        //Instaciar seguro
+        const seguro = new Seguro(marca, year, tipo);
+        seguro.cotizarSeguro();
+        //ultilizar el prototypes para cotizar
 }
