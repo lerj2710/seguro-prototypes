@@ -41,7 +41,7 @@ Seguro.prototype.cotizarSeguro = function () {
    }else{
        cantida *=1.50;
    }
-   console.log(cantida);
+   return cantida;
 }
 
 function UI() {}
@@ -79,6 +79,42 @@ UI.prototype.mostrarMensaje= (mensaje, tipo)=>{
         div.remove();
     }, 3000);
 };
+UI.prototype.MostrarResultado = (total, seguro)=>{
+    const {marca, tipo, year} = seguro
+    let tipoMarca;
+  switch (marca) {
+      case '1':
+              tipoMarca = 'Americano'; 
+            break;
+      case '2':
+              tipoMarca = 'Asiatico'; 
+            break;
+      case '1':
+              tipoMarca = 'Europeo'; 
+            break;
+          
+      default:
+          break;
+  }
+        // CREAR EL RESULTADO   
+        const div = document.createElement('div');
+        div.classList.add('mt-10');
+        div.innerHTML= `
+        <p class="header">RESULTADO</p>
+        <p class="font-bold">Marca: ${tipoMarca}</p>       
+        <p class="font-bold">Marca: ${tipo}</p>       
+        <p class="font-bold">total:<span> $ ${total}</span></p>     
+        `;
+        const resultadoDiv = document.querySelector('#resultado');
+        
+        //mostrar spinner
+        const spinner = document.querySelector('#cargando');
+        spinner.style.display = 'block'; 
+        setTimeout(() => {
+            spinner.style.display = 'none';
+            resultadoDiv.appendChild(div);
+        }, 3000);
+};
 //INSTACIAR UI
 const ui = new UI();// tengo que instanciarlo
 
@@ -109,9 +145,14 @@ function cotizarSeguro(e) {
         }
         
         ui.mostrarMensaje('Cotizando...', 'correcto');
-
+            //Ocultar el resultado previo
+            const resultados = document.querySelector('#resultado div');
+                 if (resultados != null) {
+                     resultados.remove();
+                 };
         //Instaciar seguro
         const seguro = new Seguro(marca, year, tipo);
-        seguro.cotizarSeguro();
+        const total = seguro.cotizarSeguro();
         //ultilizar el prototypes para cotizar
+       ui.MostrarResultado(total,seguro);
 }
